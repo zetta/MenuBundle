@@ -1,17 +1,45 @@
 ZettaMenuBundle
 ===============
 
+One Menu To Rule Them All
 
-Bundle que utiliza KnpMenu para el rendereo de los menus y adicionalmente se administra la seguridad de esta manera puedes tener un único menú que se mostrará de diferentes formas dependiendo del ROL de usuario que esté navegando.
+Este bundle es una extensión de [KnpMenuBundle](https://github.com/KnpLabs/KnpMenuBundle) con el cual puedes agregar un menú general para el sistema y este se filtrará dependiendo el rol del usuario.
+
+## Caracterísiticas
+
+ - Los menus son definidos desde el archivo de configuración
+ - Si cambias el firewall de tu sistema el menu se modifica automáticamente para no mostrar links a secciones no permitidas
+ - Acepta seguridad via [Anotaciones](http://jmsyst.com/bundles/JMSSecurityExtraBundle/master/annotations#secure)
 
 
+## Requisitos
+
+ - [KnpMenuBundle](https://github.com/KnpLabs/KnpMenuBundle)
+ - [KnpMenu](https://github.com/KnpLabs/KnpMenu) y el bundle
+ - [JMSSecurityExtraBundle](https://github.com/schmittjoh/JMSSecurityExtraBundle)
 
 
-## Configuración
+## Instalación
 
-Para agregar un menu se debe agregar la entrada al archivo config 
+Para instalar el bundle es necesario agregar la dependencia en el archivo composer.json.
 
--/app/config/config.yml-
+    "require": {
+        "zetta/menu-bundle" : "dev-master"
+
+Posteriormente se debe registrar el bundle en el kernel de la aplicación
+
+    $bundles = array(
+        ....
+        new Knp\Bundle\MenuBundle\KnpMenuBundle(),
+        new Zetta\MenuBundle\ZettaMenuBundle()
+
+## Modo de Uso
+
+
+Definimos un menú básico en el archivo de configuracion
+
+
+--app/config/config.yml--
 ```yaml
 zetta_menu:
     menus:
@@ -21,55 +49,104 @@ zetta_menu:
                 route: '_welcome'
             users:
                 label: 'Usuarios'
-                uri: '/user/' 
-                children: 
+                uri: '/user/'
+                children:
                     new:
                         label: 'Guardar usuario nuevo'
                         uri: '/user/new'
                     archive:
                         label: 'Usuarios historicos'
                         uri: '/user/archive'
-            domains:
-                label: 'Dominios'
-                uri: '/domain/list'
-                children:
-                   new:
-                     label: Nuevo 
-                     uri: '/domain/new'
-            external:
-                label: 'Externo'
-                uri: 'http://www.google.com/'
             catalogs:
-                label: 'Catalogos'
+                label: 'Catálogos'
                 route: 'catalogs'
                 children:
                     status:
                         label: 'Status'
                         uri: '/status/list'
-                    sex: 
-                        label: 'Sexo'
-                        uri: '/sex/list'
-                    brands:
-                        label: 'Marcas'
-                        uri: '/brand/list'
-                        children: 
-                            new: 
-                                label: 'Nueva Marca'
-                                uri: '/brand/new'
-                    places:
-                        label: 'Lugares'
-                        uri: '/places/list'
-                        children:
-                            new: 
-                                label: 'Nuevo lugar'
-                                uri: '/place/new'
-            admin:
-                label: 'Administracion'
-                uri: '/admin/charts'
+            statistics:
+                label: 'Estadísticas'
+                uri: '/admin/stats'
 
-        sidebar:
-            sidebar1: 
+        sidebar:  #otro menu ...
+            sidebar1:
                 label: "Sidebar 1"
 ```
 
+Para imprimirlo en nuestro template utilizamos el helper de knp
 
+
+```jinja
+{{ knp_menu_render('admin') }}
+```
+
+Por default si no existen reglas de denegación el menu se imprimirá completo.
+
+ - Dashboard
+ - Usuarios
+    - Guardar usuario nuevo
+    - Usuarios históricos
+ - Catálogos
+    - Status
+ - Estadísticas
+
+
+Al definir reglas de seguridad podemos observar como el render del menu se ve afectado.
+
+
+--app/config/security.yml--
+```yaml
+
+    role_hierarchy:
+        ROLE_MANAGER:       ROLE_USER
+        ROLE_ADMIN:         ROLE_MANAGER
+    ...
+    access_control:
+        - { path: ^/admin/, role: ROLE_ADMIN }
+        - { path: ^/user/new, role: ROLE_MANAGER }
+        - { path: ^/$, role: ROLE_USER }
+
+```
+
+El administrador de sistema podrá ver entonces el menú completo, sin embargo si un usuario con rol ROLE_USER entra al sistema el solo podrá ver:
+
+ - Dashboard
+ - Usuarios
+    - Usuarios históricos
+ - Catálogos
+    - Status
+
+
+Veamos el ejemplo con una anotación.
+
+Teniendo la ruta de los catálogos definida
+--app/config/routing.yml--
+```yaml
+catalogs:
+    pattern: /catalogs/
+    defaults: {_controller: ExampleBundle:Catalogs:index}
+```yaml
+
+--src/Acme/ExampleBundle/Controller/CatalogsController.php--
+```php
+
+use JMS\SecurityExtraBundle\Annotation\Secure;
+
+class CatalogsController{
+
+    /**
+     * @Secure(roles="ROLE_MANAGER")
+     */
+    public function indexAction()
+    {
+        // ... blah
+    }
+
+}
+```
+
+El mismo rol ROLE_USER verá entonces un menu asi
+
+ - Dashboard
+ - Usuarios
+    - Usuarios históricos
