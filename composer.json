@@ -1,5 +1,5 @@
 {
-    "name": "zetta/menuBundle",
+    "name": "zetta/menu-bundle",
     "type": "symfony-bundle",
     "description": "Admin menu",
     "keywords": ["Menu management"],
