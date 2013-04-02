@@ -1,0 +1,21 @@
+parameters:
+  zetta_menu.menu.configuration: ''
+
+services:
+  zetta_menu.provider:
+        class: 'Zetta\MenuBundle\Provider\MenuProvider'
+        arguments:
+          - '@knp_menu.factory'
+          - '@zetta_menu.manager'
+        tags:
+          - { name: knp_menu.provider }
+  zetta_menu.manager:
+        class: 'Zetta\MenuBundle\Core\Manager'
+        arguments:
+          - @service_container
+          - @knp_menu.factory
+          - @zetta_menu.security
+          - %zetta_menu.menu.configuration%
+  zetta_menu.security:
+        class: Zetta\MenuBundle\Services\Security
+        arguments: [@router, @security.access.decision_manager, @security.context, @security.access_map, @security.extra.annotation_driver]

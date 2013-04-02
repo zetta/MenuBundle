@@ -1,0 +1,31 @@
+{
+    "name": "zetta/menuBundle",
+    "type": "symfony-bundle",
+    "description": "Admin menu",
+    "keywords": ["Menu management"],
+    "homepage": "http://github.com/zetta/menuBundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Juan Carlos Clemente",
+            "email": "zetaweb@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/framework-bundle": ">=2.1,<2.3-dev",
+        "knplabs/knp-menu-bundle": "1.1.*",
+        "symfony/security-bundle": ">=2.1,<2.3-dev"
+    },
+    "require-dev": {
+        "twig/twig": "*",
+        "doctrine/doctrine-bundle": "*",
+        "symfony/yaml": "2.1.*",
+        "symfony/validator": "2.1.*"
+    },
+    "autoload": {
+        "psr-0": { "Zetta\\MenuBundle": "" }
+    },
+    "target-dir": "Zetta/MenuBundle"
+}
