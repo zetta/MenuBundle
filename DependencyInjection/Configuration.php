@@ -27,13 +27,13 @@ class Configuration implements ConfigurationInterface
             ->beforeNormalization()
                 ->always(function($config)
                 {
-                    //if(isset($config['menus']))
+                    if(isset($config['menus']))
                     {
                         foreach($config['menus'] as $idx => $node)
                         {
                             $config['menus'][$idx] = $this->flatNode($node);
                         }
-                    }   
+                    }
                     return $config;
                 })
             ->end()
@@ -59,11 +59,11 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
         ->end();
-        
+
 
         return $treeBuilder;
     }
-    
+
     /**
      * Flat a node
      * @param array node
@@ -100,5 +100,5 @@ class Configuration implements ConfigurationInterface
         }
         return $node;
     }
-    
+
 }

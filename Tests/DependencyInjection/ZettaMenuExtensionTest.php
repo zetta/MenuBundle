@@ -42,7 +42,18 @@ class ZettaMenuExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $container = new ContainerBuilder();
         $loader = new ZettaMenuExtension();
-        $config = $this->getIncorrectConfig();
+        $config = $this->getInvalidConfig();
+        $loader->load(array($config), $container);
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     */
+    public function testLoadThrowsExceptionUnlessNodeMenusIsDefined()
+    {
+        $container = new ContainerBuilder();
+        $loader = new ZettaMenuExtension();
+        $config = array('incorrectnode' => array());
         $loader->load(array($config), $container);
     }
 
