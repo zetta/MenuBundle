@@ -15,6 +15,7 @@ Este bundle es una extensión de [KnpMenuBundle](https://github.com/KnpLabs/KnpM
 
 ## Requisitos
 
+ - PHP >=5.4
  - [KnpMenuBundle](https://github.com/KnpLabs/KnpMenuBundle)
  - [KnpMenu](https://github.com/KnpLabs/KnpMenu) y el bundle
  - [JMSSecurityExtraBundle](https://github.com/schmittjoh/JMSSecurityExtraBundle)
