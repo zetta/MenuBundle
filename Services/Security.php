@@ -20,7 +20,7 @@ use \ReflectionClass;
  *
  * @author zetta
  */
-class Security {
+class Security implements SecurityInterface{
 
     private $router;
     private $accessDecisionManager;
@@ -28,8 +28,8 @@ class Security {
     private $request;
     private $securityAnnotationDriver;
 
-    /**0
-     * Constructor de la clase 
+    /**
+     * Constructor de la clase
      * @param \Symfony\Component\Routing\RouterInterface $router
      * @param \Symfony\Bundle\FrameworkBundle\Controller\ControllerResolver $resolver
      * @param \Doctrine\Common\Annotations\Reader $reader
@@ -43,9 +43,9 @@ class Security {
         $this->map = $map;
         $this->securityAnnotationDriver = $securityAnnotationDriver;
     }
- 
+
     /**
-     * Verify if the current user has permission to see the current link 
+     * Verify if the current user has permission to see the current link
      * @param array $arguments array with route and uri
      * @return boolean True if the user has permission
      * @uses Security::checkPermissionsForUri
@@ -56,17 +56,17 @@ class Security {
         {
             throw new \InvalidArgumentException("An array matching [uri=>'foo', 'route'=>'bar'] must be provide");
         }
-        
+
         if(isset($arguments['route']))
         {
             $arguments['uri'] = $this->router->generate($arguments['route'], []);
         }
-        
+
         return $this->checkPermissionsForUri($arguments['uri']);
     }
-    
+
     /**
-     * Check if a user has permission to a uri 
+     * Check if a user has permission to a uri
      * @param string $uri
      * @return boolean
      */
@@ -78,16 +78,16 @@ class Security {
         $request = new Request();
         $request->setPathInfo($uri);
         list($attributes) = $this->map->getPatterns($request);
-           
+
         if (null === $attributes){
             $route = $this->getRouteByUri($uri);
             if(null === $route)
             {
                 return true;
             }
-            
+
             list( $controllerName, $actionName ) = explode('::',$route->getDefault('_controller'));
-            
+
             $metadata = $this->securityAnnotationDriver->loadMetadataForClass( new ReflectionClass($controllerName) );
             if(isset( $metadata->methodMetadata[$actionName] ))
             {
@@ -98,9 +98,9 @@ class Security {
         }
 
         return $this->accessDecisionManager->decide($token, $attributes);
-        
+
     }
-    
+
     /**
      * Obtains a Route by uri (pathinfo)  /path/
      * @param string $uri
@@ -115,6 +115,6 @@ class Security {
             }
         }
     }
-    
-    
+
+
 }

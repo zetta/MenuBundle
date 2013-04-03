@@ -2,16 +2,16 @@
 /**
  * @author Juan Carlos Clemente <zetaweb@gmail.com>
  */
- 
+
 namespace Zetta\MenuBundle\Core;
 
 use Knp\Menu\FactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Zetta\MenuBundle\Services\Security;
+use Zetta\MenuBundle\Services\SecurityInterface;
 
-class Manager 
+class Manager
 {
-   
+
     private $container;
     private $factory;
     private $config;
@@ -22,7 +22,7 @@ class Manager
      * @param FactoryInterface $factory
      * @param array $config
      */
-    public function __construct(ContainerInterface $container, FactoryInterface $factory,  Security $security, array $config )
+    public function __construct(ContainerInterface $container, FactoryInterface $factory,  SecurityInterface $security, array $config )
     {
         $this->container = $container;
         $this->factory = $factory;
@@ -34,7 +34,7 @@ class Manager
      * Builds the requested menu
      *
      * @param string $name
-     * @return ItemInterface
+     * @return \Knp\Menu\ItemInterface
      * @throws \InvalidArgumentException if the menu does not exists
      */
     public function getMenu($name, array $options = array())
@@ -77,12 +77,11 @@ class Manager
                 unset($nodes[ $idx ]);
             }
         }
-       
+
         // Build the menu
         $menu = $this->factory->createFromArray(array('children' => $nodes));
         $menu->setCurrentUri($this->container->get('request')->getRequestUri());
 
-        
         return $menu;
     }
 
