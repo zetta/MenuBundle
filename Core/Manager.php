@@ -15,6 +15,7 @@ class Manager
     private $container;
     private $factory;
     private $config;
+    private $security;
 
 
     /**
@@ -93,6 +94,6 @@ class Manager
      */
     public function has($name, array $options = array())
     {
-        return array_key_exists($name, $this->config['menus']);
+        return isset($this->config['menus']) && array_key_exists($name, $this->config['menus']);
     }
 }

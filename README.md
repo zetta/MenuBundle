@@ -1,7 +1,6 @@
 ZettaMenuBundle
 ===============
 
-
 One Menu To Rule Them All
 
 Este bundle es una extensión de [KnpMenuBundle](https://github.com/KnpLabs/KnpMenuBundle) con el cual puedes agregar un menú general para el sistema y este se filtrará dependiendo el rol del usuario.

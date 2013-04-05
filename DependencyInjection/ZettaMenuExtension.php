@@ -21,15 +21,14 @@ class ZettaMenuExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('services.yml');
+
         // if the user add a menu in the configuration
         $config = array();
         if(count($configs[0]))
         {
             $config = $this->processConfiguration(new Configuration(), $configs);
-
-            $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-            $loader->load('services.yml');
-
             if (!isset($config)) {
                 throw new \InvalidArgumentException('A menu must be configured');
             }

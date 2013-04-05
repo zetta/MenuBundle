@@ -3,14 +3,14 @@ parameters:
 
 services:
   zetta_menu.provider:
-        class: 'Zetta\MenuBundle\Provider\MenuProvider'
+        class: Zetta\MenuBundle\Provider\MenuProvider
         arguments:
-          - '@knp_menu.factory'
-          - '@zetta_menu.manager'
+          - @knp_menu.factory
+          - @zetta_menu.manager
         tags:
           - { name: knp_menu.provider }
   zetta_menu.manager:
-        class: 'Zetta\MenuBundle\Core\Manager'
+        class: Zetta\MenuBundle\Core\Manager
         arguments:
           - @service_container
           - @knp_menu.factory
@@ -18,4 +18,19 @@ services:
           - %zetta_menu.menu.configuration%
   zetta_menu.security:
         class: Zetta\MenuBundle\Services\Security
-        arguments: [@router, @security.access.decision_manager, @security.context, @security.access_map, @security.extra.annotation_driver]
+        arguments:
+          - @router
+          - @security.access.decision_manager
+          - @security.context
+          - @security.access_map
+          - @security.extra.annotation_driver
+  knp_menu.menu_provider.builder_alias:
+        class: Zetta\MenuBundle\Provider\BuilderAliasProvider
+        public: false
+        arguments:
+          - @kernel
+          - @service_container
+          - @knp_menu.factory
+          - @zetta_menu.security
+        tags:
+          - { name: knp_menu.provider }

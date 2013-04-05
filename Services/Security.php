@@ -9,6 +9,7 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Http\AccessMapInterface;
 use Symfony\Component\Routing\Matcher\TraceableUrlMatcher;
 use JMS\SecurityExtraBundle\Metadata\Driver\AnnotationDriver;
+use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 
 use Zetta\MenuBundle\Core\Request;
 use \ReflectionClass;
