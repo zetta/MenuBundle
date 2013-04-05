@@ -16,7 +16,7 @@ Este bundle es una extensión de [KnpMenuBundle](https://github.com/KnpLabs/KnpM
 
  - PHP >=5.4
  - [KnpMenuBundle](https://github.com/KnpLabs/KnpMenuBundle)
- - [KnpMenu](https://github.com/KnpLabs/KnpMenu) y el bundle
+ - [KnpMenu](https://github.com/KnpLabs/KnpMenu)
  - [JMSSecurityExtraBundle](https://github.com/schmittjoh/JMSSecurityExtraBundle)
 
 
@@ -45,6 +45,68 @@ Posteriormente se debe registrar el bundle en el kernel de la aplicación
 
 ## Modo de Uso
 
+Existen 2 formas de filtrar los menús que generamos.
+
+### Método simple
+
+Si utilizas el [método simple](https://github.com/KnpLabs/KnpMenuBundle/blob/master/Resources/doc/index.md#method-a-the-easy-way-yay) para la creación de menus
+
+```php
+// src/Acme/DemoBundle/Menu/Builder.php
+namespace Acme\DemoBundle\Menu;
+
+use Knp\Menu\FactoryInterface;
+use Symfony\Component\DependencyInjection\ContainerAware;
+
+class Builder extends ContainerAware
+{
+    public function mainMenu(FactoryInterface $factory, array $options)
+    {
+        $menu = $factory->createItem('root');
+
+        $menu->addChild('Home', array('route' => 'homepage'));
+        $menu->addChild('About Me', array(
+            'route' => 'page_show',
+            'routeParameters' => array('id' => 42)
+        ));
+        // ... add more children
+
+        return $menu;
+    }
+}
+```
+
+Basta con agregar la Anotación Zetta\MenuBundle\Annotation\SecureMenu al Método para filtrarlo por permisos
+
+```php
+// src/Acme/DemoBundle/Menu/Builder.php
+namespace Acme\DemoBundle\Menu;
+
+use Knp\Menu\FactoryInterface;
+use Symfony\Component\DependencyInjection\ContainerAware;
+
+class Builder extends ContainerAware
+{
+    /**
+     * @SecureMenu
+     */
+    public function mainMenu(FactoryInterface $factory, array $options)
+    {
+        $menu = $factory->createItem('root');
+
+        $menu->addChild('Home', array('route' => 'homepage'));
+        $menu->addChild('About Me', array(
+            'route' => 'page_show',
+            'routeParameters' => array('id' => 42)
+        ));
+        // ... add more children
+
+        return $menu;
+    }
+}
+```
+
+### Método de configuración (config.yml)
 
 Definimos un menú básico en el archivo de configuracion
 
@@ -126,7 +188,7 @@ El administrador de sistema podrá ver entonces el menú completo, sin embargo s
     - Status
 
 
-### Anotaciones
+#### Anotaciones
 
 Teniendo la ruta de los catálogos definida
 
