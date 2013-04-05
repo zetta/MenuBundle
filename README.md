@@ -84,6 +84,7 @@ namespace Acme\DemoBundle\Menu;
 
 use Knp\Menu\FactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerAware;
+use Zetta\MenuBundle\Annotation\SecureMenu;
 
 class Builder extends ContainerAware
 {
