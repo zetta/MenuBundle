@@ -40,6 +40,7 @@ Posteriormente se debe registrar el bundle en el kernel de la aplicación
         new Knp\Bundle\MenuBundle\KnpMenuBundle(),
         new Zetta\MenuBundle\ZettaMenuBundle()
 ```
+
 **Es importante que la declaración de ZettaMenuBundle sea después de KnpMenuBundle**
 
 ## Modo de Uso
