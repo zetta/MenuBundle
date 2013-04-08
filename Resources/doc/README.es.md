@@ -3,19 +3,17 @@ ZettaMenuBundle
 
 One Menu To Rule Them All
 
+Este bundle es una extensión de [KnpMenuBundle](https://github.com/KnpLabs/KnpMenuBundle) con el cual puedes agregar un menú general para el sistema y este se filtrará dependiendo el rol del usuario.
 
-This bundle is an extension of [KnpMenuBundle](https://github.com/KnpLabs/KnpMenuBundle) with which you can add a main menu for the system and this will be filtered depending on user role.
+## Características
 
-
-## Features
-
- - The menus can be set from the configuration file `app/config/config.yml`
- - The menu links are automatically filtered by the rules defined in the firewall
- - [JMSSecurityExtraBundle](http://jmsyst.com/bundles/JMSSecurityExtraBundle/master/annotations#secure) annotations are supported for creating the filter
- - Integration with existing menus on your bundle thanks to the [@SecureMenu](#simple-way) annotation
+ - Los menus pueden ser definidos desde el archivo de configuración `app/config/config.yml`
+ - Los links del menu son filtrados automáticamente por las reglas definidas en el firewall
+ - Las Anotaciones de [JMSSecurityExtraBundle](http://jmsyst.com/bundles/JMSSecurityExtraBundle/master/annotations#secure) son soportadas para la creación del filtro
+ - Integración con los menus existentes en tu bundle gracias a la anotación [@SecureMenu](#mtodo-simple)
 
 
-## Requirements
+## Requisitos
 
  - PHP >=5.4
  - [KnpMenuBundle](https://github.com/KnpLabs/KnpMenuBundle)
@@ -23,9 +21,9 @@ This bundle is an extension of [KnpMenuBundle](https://github.com/KnpLabs/KnpMen
  - [JMSSecurityExtraBundle](https://github.com/schmittjoh/JMSSecurityExtraBundle)
 
 
-## Installation
+## Instalación
 
-In order to install the bundle you need to add the dependency in `composer.json` file.
+Para instalar el bundle es necesario agregar la dependencia en el archivo composer.json.
 
 ```json
     //composer.json
@@ -34,7 +32,7 @@ In order to install the bundle you need to add the dependency in `composer.json`
     }
 ```
 
-Then you must register the bundle in the kernel of the application.
+Posteriormente se debe registrar el bundle en el kernel de la aplicación.
 
 ```php
 // app/AppKernel.php
@@ -44,15 +42,15 @@ Then you must register the bundle in the kernel of the application.
         new Zetta\MenuBundle\ZettaMenuBundle()
 ```
 
-**It is important that the ZettaMenuBundle statement is after KnpMenuBundle**
+**Es importante que la declaración de ZettaMenuBundle sea después de KnpMenuBundle**
 
-## Usage
+## Modo de Uso
 
-There are two ways to filter our menus.
+Existen 2 formas de filtrar los menús que generamos.
 
-### Simple way
+### Método simple
 
-If you use the [simple method](https://github.com/KnpLabs/KnpMenuBundle/blob/master/Resources/doc/index.md#method-a-the-easy-way-yay) for creating menus
+Si utilizas el [método simple](https://github.com/KnpLabs/KnpMenuBundle/blob/master/Resources/doc/index.md#method-a-the-easy-way-yay) para la creación de menus
 
 ```php
 // src/Acme/DemoBundle/Menu/Builder.php
@@ -79,8 +77,7 @@ class Builder extends ContainerAware
 }
 ```
 
-Simply add the annotation `Zetta\MenuBundle\Annotation\SecureMenu` to the method to filter the items.
-
+Basta con agregar la Anotación `Zetta\MenuBundle\Annotation\SecureMenu` al método para filtrar los items.
 
 ```php
 // src/Acme/DemoBundle/Menu/Builder.php
