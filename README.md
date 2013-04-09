@@ -111,9 +111,9 @@ class Builder extends ContainerAware
 }
 ```
 
-### Método de configuración (config.yml)
+### Configuration Method `config.yml`
 
-Definimos un menú básico en el archivo de configuracion
+We define a menu in the configuration file
 
 ```yaml
 #app/config/config.yml
@@ -124,50 +124,50 @@ zetta_menu:
                 label: 'Dashboard'
                 route: '_welcome'
             users:
-                label: 'Usuarios'
+                label: 'Users'
                 uri: '/user/'
                 children:
                     new:
-                        label: 'Guardar usuario nuevo'
+                        label: 'New User'
                         uri: '/user/new'
                     archive:
-                        label: 'Usuarios historicos'
+                        label: 'User archive'
                         uri: '/user/archive'
             catalogs:
-                label: 'Catálogos'
+                label: 'Catalogs'
                 route: 'catalogs'
                 children:
                     status:
                         label: 'Status'
                         uri: '/status/list'
             statistics:
-                label: 'Estadísticas'
+                label: 'Stats'
                 uri: '/admin/stats'
 
-        sidebar:  #otro menu ...
+        sidebar:  #another one ...
             sidebar1:
                 label: "Sidebar 1"
 ```
 
-
-Para imprimirlo en nuestro template utilizamos el helper de knp
+Using the knp twig helper we can print it
 
 ```jinja
     {{ knp_menu_render('admin') }}
 ```
 
-Por default si no existen reglas de denegación el menu se imprimirá completo.
+By defailt if no deny rules exists in firewall or annotations the full menu will be printed
+
 
  - Dashboard
- - Usuarios
-    - Guardar usuario nuevo
-    - Usuarios históricos
- - Catálogos
+ - Users
+    - New User
+    - User Archive
+ - Catalogs
     - Status
- - Estadísticas
+ - Stats
 
+In order to affect the menu render we start to define rules in our firewall
 
-Al definir reglas de seguridad podemos observar como el render del menu se ve afectado.
 
 ```yaml
 #app/config/security.yml
@@ -184,7 +184,8 @@ security:
 ```
 
 
-El administrador de sistema podrá ver entonces el menú completo, sin embargo si un usuario con rol ROLE_USER entra al sistema el solo podrá ver:
+The system administrator can then see the full menu, however if a user authenticated with ROLE_USER can only view:
+
 
  - Dashboard
  - Usuarios
@@ -193,9 +194,9 @@ El administrador de sistema podrá ver entonces el menú completo, sin embargo s
     - Status
 
 
-#### Anotaciones
+#### Annotations
 
-Teniendo la ruta de los catálogos definida
+Assuming we have catalogs route defined in `routing.yml`
 
 ```yaml
 #app/config/routing.yml
@@ -204,7 +205,7 @@ catalogs:
     defaults: {_controller: ExampleBundle:Catalogs:index}
 ```
 
-Agregamos la anotación en el método de nuestro controlador
+We add the annotation in the controller's method
 
 ```php
 // src/Acme/ExampleBundle/Controller/CatalogsController.php
@@ -223,7 +224,7 @@ class CatalogsController{
 }
 ```
 
-El mismo rol ROLE_USER verá entonces un menu asi
+The same user with ROLE_USER will see:
 
  - Dashboard
  - Usuarios

@@ -108,9 +108,9 @@ class Builder extends ContainerAware
 }
 ```
 
-### Método de configuración (config.yml)
+### Método de configuración `config.yml`
 
-Definimos un menú básico en el archivo de configuracion
+Definimos un menú en el archivo de configuracion
 
 ```yaml
 #app/config/config.yml
@@ -153,7 +153,7 @@ Para imprimirlo en nuestro template utilizamos el helper de knp
     {{ knp_menu_render('admin') }}
 ```
 
-Por default si no existen reglas de denegación el menu se imprimirá completo.
+Por default si no existen reglas de denegación en el firewall o por medio de anotaciones el menu se imprimirá completo.
 
  - Dashboard
  - Usuarios
