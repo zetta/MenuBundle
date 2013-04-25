@@ -15,7 +15,7 @@
     "require": {
         "php": ">=5.4",
         "symfony/framework-bundle": ">=2.1,<2.3-dev",
-        "knplabs/knp-menu-bundle": "2.0.*@dev",
+        "knplabs/knp-menu-bundle": "dev-master",
         "symfony/security-bundle": ">=2.1,<2.3-dev"
     },
     "require-dev": {
