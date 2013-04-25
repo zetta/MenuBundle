@@ -55,6 +55,7 @@ class Configuration implements ConfigurationInterface
                         //->scalarNode('action')->end()
                         ->scalarNode('uri')->end()
                         ->variableNode('route')->end()
+                        ->variableNode('extras')->end()
                         //->variableNode('children')->end()
                     ->end()
                 ->end()
