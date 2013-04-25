@@ -29,8 +29,10 @@ final class SecureMenu
         foreach ($iterator as $item) {
            if(! $security->checkPermissions([ 'uri' => $item->getUri(), 'route' => $item['route'] ]) )
            {
+
                $item->setDisplay(false);
            }
+
         }
         return $menu;
     }

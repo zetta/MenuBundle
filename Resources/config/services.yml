@@ -1,5 +1,10 @@
 parameters:
   zetta_menu.menu.configuration: ''
+  zetta_menu.helper.class: Zetta\MenuBundle\Twig\Helper
+  zetta_menu.manager.class: Zetta\MenuBundle\Core\Manager
+  zetta_menu.security.class: Zetta\MenuBundle\Services\Security
+  zetta_menu.twig.extension.class: Zetta\MenuBundle\Twig\BreadcrumbExtension
+  zetta_menu.menu_provider.builder_alias.class: Zetta\MenuBundle\Provider\BuilderAliasProvider
 
 services:
   zetta_menu.provider:
@@ -10,22 +15,33 @@ services:
         tags:
           - { name: knp_menu.provider }
   zetta_menu.manager:
-        class: Zetta\MenuBundle\Core\Manager
+        class: '%zetta_menu.manager.class%'
         arguments:
           - @service_container
           - @knp_menu.factory
           - @zetta_menu.security
           - %zetta_menu.menu.configuration%
   zetta_menu.security:
-        class: Zetta\MenuBundle\Services\Security
+        class: %zetta_menu.security.class%
         arguments:
           - @router
           - @security.access.decision_manager
           - @security.context
           - @security.access_map
           - @security.extra.annotation_driver
+  zetta_menu.twig.extension:
+        class: %zetta_menu.twig.extension.class%
+        arguments:
+          - @zetta_menu.helper
+        tags:
+          - { name: twig.extension}
+  zetta_menu.helper:
+        class: %zetta_menu.helper.class%
+        arguments:
+          - @knp_menu.helper
+          - @knp_menu.factory
   knp_menu.menu_provider.builder_alias:
-        class: Zetta\MenuBundle\Provider\BuilderAliasProvider
+        class: %zetta_menu.menu_provider.builder_alias.class%
         public: false
         arguments:
           - @kernel
@@ -34,3 +50,4 @@ services:
           - @zetta_menu.security
         tags:
           - { name: knp_menu.provider }
+
