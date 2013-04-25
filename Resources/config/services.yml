@@ -20,6 +20,7 @@ services:
           - @service_container
           - @knp_menu.factory
           - @zetta_menu.security
+          - @knp_menu.matcher
           - %zetta_menu.menu.configuration%
   zetta_menu.security:
         class: %zetta_menu.security.class%
@@ -40,6 +41,7 @@ services:
         arguments:
           - @knp_menu.helper
           - @knp_menu.factory
+          - @knp_menu.matcher
   knp_menu.menu_provider.builder_alias:
         class: %zetta_menu.menu_provider.builder_alias.class%
         public: false

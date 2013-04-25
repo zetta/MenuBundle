@@ -16,14 +16,16 @@ class Helper
 {
     private $knpHelper;
     private $factory;
+    private $matcher;
 
     /**
      * @param \Knp\Menu\Twig\Helper $rendererProvider
      */
-    public function __construct(KnpHelper $knpHelper, MenuFactory $factory)
+    public function __construct(KnpHelper $knpHelper, MenuFactory $factory, Matcher $matcher)
     {
         $this->knpHelper = $knpHelper;
         $this->factory = $factory;
+        $this->matcher = $matcher;
     }
 
     /**
@@ -39,20 +41,35 @@ class Helper
     public function get($menu, array $path = array(), array $options = array())
     {
         $menu = $this->knpHelper->get($menu, $path, $options);
-
         $breadCrumb = $this->factory->createItem('breadCrumb');
 
-        $itemMatcher = new Matcher();
-        $iterator = new CurrentItemFilterIterator($menu->getIterator(), $itemMatcher);
-
-        $item = $iterator->current();
-
-        do {
-            $breadCrumb->addChild( $item );
-            $parent = $item->getParent();
-        } while ( null !== $parent );
+        $treeIterator = new \RecursiveIteratorIterator(
+            new \Knp\Menu\Iterator\RecursiveItemIterator(
+                new \ArrayIterator(array($menu))
+            ),
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
 
 
+        $iterator = new CurrentItemFilterIterator($treeIterator, $this->matcher);
+
+
+        foreach ($iterator as $item) {
+           $end = $item;
+           break;
+        }
+
+        $crumbs = array();
+
+        while($end->getParent() !== null)
+        {
+            $crumbs[] = $end;
+            $end = $end->getParent();
+        }
+
+        foreach (array_reverse($crumbs) as $crumb) {
+            $breadCrumb->addChild( $crumb->copy() );
+        }
         return $breadCrumb;
     }
 

@@ -8,6 +8,10 @@ namespace Zetta\MenuBundle\Core;
 use Knp\Menu\FactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Zetta\MenuBundle\Services\SecurityInterface;
+use Knp\Menu\Matcher\Voter\UriVoter;
+use Knp\Menu\Matcher\Matcher;
+use Knp\Menu\Iterator\RecursiveItemIterator;
+use \RecursiveIteratorIterator;
 
 class Manager
 {
@@ -16,6 +20,7 @@ class Manager
     private $factory;
     private $config;
     private $security;
+    private $matcher;
 
 
     /**
@@ -23,12 +28,14 @@ class Manager
      * @param FactoryInterface $factory
      * @param array $config
      */
-    public function __construct(ContainerInterface $container, FactoryInterface $factory,  SecurityInterface $security, array $config )
+    public function __construct(ContainerInterface $container, FactoryInterface $factory,  SecurityInterface $security, Matcher $matcher,  array $config )
     {
         $this->container = $container;
         $this->factory = $factory;
         $this->config = $config;
         $this->security = $security;
+        $this->matcher = $matcher;
+        $this->matcher->addVoter(new UriVoter($_SERVER['REQUEST_URI']));
     }
 
     /**
@@ -81,8 +88,17 @@ class Manager
 
         // Build the menu
         $menu = $this->factory->createFromArray(array('children' => $nodes));
-        $menu->setCurrentUri($this->container->get('request')->getRequestUri());
 
+        $itemIterator = new RecursiveItemIterator($menu);
+        $iterator = new RecursiveIteratorIterator($itemIterator, RecursiveIteratorIterator::SELF_FIRST);
+
+        foreach ($iterator as $item)
+        {
+           if ($this->matcher->isCurrent($item))
+           {
+                $item->setCurrent(true);
+           }
+        }
         return $menu;
     }
 
