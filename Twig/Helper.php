@@ -53,14 +53,16 @@ class Helper
 
         $iterator = new CurrentItemFilterIterator($treeIterator, $this->matcher);
 
-
+        $end = null;
         foreach ($iterator as $item) {
            $end = $item;
            break;
         }
 
-        $crumbs = array();
+        if(null === $end)
+            return null;
 
+        $crumbs = array();
         while($end->getParent() !== null)
         {
             $crumbs[] = $end;
