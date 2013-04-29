@@ -35,7 +35,11 @@ class Manager
         $this->config = $config;
         $this->security = $security;
         $this->matcher = $matcher;
-        $this->matcher->addVoter(new UriVoter( $container->get('request')->getScriptName() ));
+        if($container->isScopeActive('request'))
+        {
+            $this->matcher->addVoter(new UriVoter( $container->get('request')->getScriptName() ));
+        }
+
     }
 
     /**
