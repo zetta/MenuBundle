@@ -37,7 +37,7 @@ class Manager
         $this->matcher = $matcher;
         if($container->isScopeActive('request'))
         {
-            $this->matcher->addVoter(new UriVoter( $container->get('request')->getScriptName() ));
+            $this->matcher->addVoter(new UriVoter( $container->get('request')->getPathInfo() ));
         }
 
     }
