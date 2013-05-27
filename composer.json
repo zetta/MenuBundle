@@ -11,12 +11,14 @@
             "email": "zetaweb@gmail.com"
         }
     ],
+    "repositories":
+        [{"type": "vcs","url": "http://github.com/zetta/KnpMenuBundle"}],
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.4",
         "symfony/framework-bundle": ">=2.1,<2.3-dev",
-        "knplabs/knp-menu-bundle": "*",
-        "symfony/security-bundle": ">=2.1,<2.3-dev"
+        "symfony/security-bundle": ">=2.1,<2.3-dev",
+        "zetta/knp-menu-bundle": "2.*"
     },
     "require-dev": {
         "symfony/yaml": "2.1.*"
