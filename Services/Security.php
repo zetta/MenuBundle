@@ -60,7 +60,7 @@ class Security implements SecurityInterface{
 
         if(isset($arguments['route']))
         {
-            $arguments['uri'] = $this->router->generate($arguments['route'], []);
+            $arguments['uri'] = $this->router->generate($arguments['route'], isset($arguments['routeParameters'])?$arguments['routeParameters']:[]);
         }
 
         return $this->checkPermissionsForUri($arguments['uri']);

@@ -59,7 +59,7 @@ class Manager
         $nodes = $this->config['menus'][$name];
         foreach ($nodes as $idx => $node)
         {
-            if(!$this->security->checkPermissions(['uri' => $node['uri'], 'route' => $node['route']]))
+            if(!$this->security->checkPermissions(['uri' => $node['uri'], 'route' => $node['route'], 'routeParameters' => $node['routeParameters']]))
             {
                 //user cant see this node
                 unset($nodes[ $idx ]);
@@ -91,6 +91,7 @@ class Manager
         }
 
         // Build the menu
+
         $menu = $this->factory->createFromArray(array('children' => $nodes));
 
         $itemIterator = new RecursiveItemIterator($menu);
@@ -98,7 +99,7 @@ class Manager
 
         foreach ($iterator as $item)
         {
-           if ($this->matcher->isCurrent($item))
+           if ($this->matcher->isCurrent($item) || in_array($this->container->get('request')->get('_route'), $item->getExtra('routes')) )
            {
                 $item->setCurrent(true);
            }

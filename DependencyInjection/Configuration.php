@@ -55,6 +55,8 @@ class Configuration implements ConfigurationInterface
                         //->scalarNode('action')->end()
                         ->scalarNode('uri')->end()
                         ->variableNode('route')->end()
+                        ->booleanNode('display')->end()
+                        ->variableNode('routeParameters')->end()
                         ->variableNode('extras')->end()
                         //->variableNode('children')->end()
                     ->end()
@@ -86,6 +88,7 @@ class Configuration implements ConfigurationInterface
             $node[ $key ]['parent'] = $parent;
             $node[ $key ]['uri'] = isset($node[ $key ]['uri'])?$node[ $key ]['uri']:null;
             $node[ $key ]['route'] = isset($node[ $key ]['route'])?$node[ $key ]['route']:null;
+            $node[ $key ]['routeParameters'] = isset($node[ $key ]['routeParameters'])?$node[ $key ]['routeParameters']:null;
             if(array_key_exists('children', $item))
             {
                 if(!is_array($item['children']))
