@@ -73,29 +73,31 @@ class Security implements SecurityInterface{
      */
     public function checkPermissionsForUri($uri)
     {
+        $attributes = null;
         if (!$token = $this->context->getToken()){
            throw new AuthenticationCredentialsNotFoundException('A Token was not found in the SecurityContext.');
         }
-        $request = new Request();
-        $request->setPathInfo($uri);
-        list($attributes) = $this->map->getPatterns($request);
 
-        if (null === $attributes){
-            $route = $this->getRouteByUri($uri);
-            if(null === $route)
-            {
-                return true;
-            }
+        $route = $this->getRouteByUri($uri);
+        if (null === $route)
+        {
+            return true;
+        }
 
-            list( $controllerName, $actionName ) = explode('::',$route->getDefault('_controller'));
+        list( $controllerName, $actionName ) = explode('::',$route->getDefault('_controller'));
+        $metadata = $this->securityAnnotationDriver->loadMetadataForClass( new ReflectionClass($controllerName) );
+        if(isset( $metadata->methodMetadata[$actionName] ))
+        {
+            $attributes = $metadata->methodMetadata[$actionName]->roles;
+        }  else {
+            return true;
+        }
 
-            $metadata = $this->securityAnnotationDriver->loadMetadataForClass( new ReflectionClass($controllerName) );
-            if(isset( $metadata->methodMetadata[$actionName] ))
-            {
-                $attributes = $metadata->methodMetadata[$actionName]->roles;
-            }  else {
-                return true;
-            }
+        if (null === $attributes)
+        {
+            $request = new Request();
+            $request->setPathInfo($uri);
+            list($attributes) = $this->map->getPatterns($request);
         }
 
         return $this->accessDecisionManager->decide($token, $attributes);
