@@ -99,10 +99,13 @@ class Manager
 
         foreach ($iterator as $item)
         {
-           if ($this->matcher->isCurrent($item) || in_array($this->container->get('request')->get('_route'), $item->getExtra('routes')) )
-           {
-                $item->setCurrent(true);
-           }
+            if (is_array($item->getExtra('routes')))
+            {
+                if ($this->matcher->isCurrent($item) || in_array($this->container->get('request')->get('_route'), $item->getExtra('routes')) )
+                {
+                    $item->setCurrent(true);
+                }
+            }
         }
         return $menu;
     }
