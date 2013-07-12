@@ -10,6 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Zetta\MenuBundle\Services\SecurityInterface;
 use Knp\Menu\Matcher\Voter\UriVoter;
 use Knp\Menu\Matcher\Matcher;
+use Knp\Menu\Loader\ArrayLoader;
 use Knp\Menu\Iterator\RecursiveItemIterator;
 use \RecursiveIteratorIterator;
 
@@ -91,8 +92,8 @@ class Manager
         }
 
         // Build the menu
-
-        $menu = $this->factory->createFromArray(array('children' => $nodes));
+        $loader = new ArrayLoader($this->factory);
+        $menu =  $loader->load(array('children' => $nodes));
 
         $itemIterator = new RecursiveItemIterator($menu);
         $iterator = new RecursiveIteratorIterator($itemIterator, RecursiveIteratorIterator::SELF_FIRST);
