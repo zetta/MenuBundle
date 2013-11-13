@@ -15,10 +15,12 @@
     "require": {
         "php": ">=5.4",
         "symfony/framework-bundle": "~2",
-        "symfony/security-bundle": "~2"
+        "symfony/security-bundle": "~2",
+        "knplabs/knp-menu": "~2.0, >=2.0.0-beta1"
     },
     "require-dev": {
-        "symfony/yaml": "2.1.*"
+        "symfony/yaml": "2.1.*",
+        "knplabs/knp-menu-bundle":"dev-master"
     },
     "autoload": {
         "psr-0": { "Zetta\\MenuBundle": "" }
