@@ -57,7 +57,7 @@ class Manager
             throw new \InvalidArgumentException(sprintf('The menu "%s" is not defined.', $name));
         }
 
-        $nodes = $this->config['menus'][$name];
+        $nodes = $this->config['menus'][$name]['children'];
         foreach ($nodes as $idx => $node)
         {
             if(!$this->security->checkPermissions(['uri' => $node['uri'], 'route' => $node['route'], 'routeParameters' => $node['routeParameters']]))
@@ -66,6 +66,7 @@ class Manager
                 unset($nodes[ $idx ]);
                 continue;
             }
+/*
             if($node['parent'])
             {
                 $location = &$nodes;
@@ -89,11 +90,14 @@ class Manager
                 }
                 unset($nodes[ $idx ]);
             }
+*/
         }
 
         // Build the menu
         $loader = new ArrayLoader($this->factory);
-        $menu =  $loader->load(array('children' => $nodes));
+        $menuconfig = $this->config['menus'][$name];
+        $menuconfig['children'] = $nodes;
+        $menu =  $loader->load($menuconfig);
 
         $itemIterator = new RecursiveItemIterator($menu);
         $iterator = new RecursiveIteratorIterator($itemIterator, RecursiveIteratorIterator::SELF_FIRST);
