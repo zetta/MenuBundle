@@ -58,40 +58,7 @@ class Manager
         }
 
         $nodes = $this->config['menus'][$name]['children'];
-        foreach ($nodes as $idx => $node)
-        {
-            if(!$this->security->checkPermissions(['uri' => $node['uri'], 'route' => $node['route'], 'routeParameters' => $node['routeParameters']]))
-            {
-                //user cant see this node
-                unset($nodes[ $idx ]);
-                continue;
-            }
-/*
-            if($node['parent'])
-            {
-                $location = &$nodes;
-                $found = false;
-                foreach(explode('.', $node['parent']) as $step)
-                {
-                    if(isset($location[$step]))
-                    {
-                        $location = &$location[$step]['children'];
-                        $found = true;
-                    }else
-                    {
-                        $found = false;
-                    }
-                }
-                // if parent node are hidden childs dont display
-                if($found)
-                {
-                    $location[str_replace($node['parent'].'.', '', $idx)] = $node;
-                    $node['parent'] = null;
-                }
-                unset($nodes[ $idx ]);
-            }
-*/
-        }
+        $nodes = $this->secureMenu($nodes);
 
         // Build the menu
         $loader = new ArrayLoader($this->factory);
@@ -124,5 +91,22 @@ class Manager
     public function has($name, array $options = array())
     {
         return isset($this->config['menus']) && array_key_exists($name, $this->config['menus']);
+    }
+
+    private function secureMenu($nodes)
+    {
+        foreach ($nodes as $idx => $node)
+        {
+            if(!$this->security->checkPermissions(['uri' => $node['uri'], 'route' => $node['route'], 'routeParameters' => $node['routeParameters']]))
+            {
+                unset($nodes[$idx]);
+                continue;
+            }
+            if (array_key_exists('children', $node))
+            {
+                $nodes[$idx]['children'] = $this->secureMenu($node['children']);
+            }
+        }
+        return $nodes;
     }
 }
