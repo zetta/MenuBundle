@@ -58,27 +58,21 @@ class Security implements SecurityInterface{
             throw new \InvalidArgumentException("An array matching [uri=>'foo', 'route'=>'bar'] must be provide");
         }
 
-        if(isset($arguments['route']))
-        {
-            $arguments['uri'] = $this->router->generate($arguments['route'], isset($arguments['routeParameters'])?$arguments['routeParameters']:[]);
-        }
-
-        return $this->checkPermissionsForUri($arguments['uri']);
-    }
-
-    /**
-     * Check if a user has permission to a uri
-     * @param string $uri
-     * @return boolean
-     */
-    public function checkPermissionsForUri($uri)
-    {
         $attributes = null;
         if (!$token = $this->context->getToken()){
            throw new AuthenticationCredentialsNotFoundException('A Token was not found in the SecurityContext.');
         }
 
-        $route = $this->getRouteByUri($uri);
+        if(isset($arguments['route']))
+        {
+            $route = $this->router->getRouteCollection()->get($arguments['route']);
+        }
+        else
+        {
+            $route = $this->getRouteByUri($arguments['uri']);
+        }
+
+
         if (null === $route)
         {
             return true;
