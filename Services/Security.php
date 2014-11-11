@@ -77,8 +77,16 @@ class Security implements SecurityInterface{
         {
             return true;
         }
-
-        list( $controllerName, $actionName ) = explode('::',$route->getDefault('_controller'));
+        $controller = $route->getDefault('_controller');
+        if (false === $pos = strpos($controller, '::'))
+        {
+            $count = substr_count($controller, ':');
+            if (1 == $count) {
+                // controller in the service:method notation
+                return true;
+            }
+        }
+        list( $controllerName, $actionName ) = explode('::',$controller);
         $metadata = $this->securityAnnotationDriver->loadMetadataForClass( new ReflectionClass($controllerName) );
         if(isset( $metadata->methodMetadata[$actionName] ))
         {
