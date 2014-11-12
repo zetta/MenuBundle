@@ -120,34 +120,50 @@ We define a menu in the configuration file
 zetta_menu:
     menus:
         admin:
-            dashboard:
-                label: 'Dashboard'
-                route: '_welcome'
-            users:
-                label: 'Users'
-                uri: '/user/'
-                children:
-                    new:
-                        label: 'New User'
-                        uri: '/user/new'
-                    archive:
-                        label: 'User archive'
-                        uri: '/user/archive'
-            catalogs:
-                label: 'Catalogs'
-                route: 'catalogs'
-                children:
-                    status:
-                        label: 'Status'
-                        uri: '/status/list'
-            statistics:
-                label: 'Stats'
-                uri: '/admin/stats'
+            childrenAttributes:
+                class: 'nav'
+            children:
+                dashboard:
+                    label: 'Dashboard'
+                    route: '_welcome'
+                users:
+                    label: '<i>Users</i>'
+                    uri: '/user/'
+                    extras:
+                        safe_label: true
+                    attributes:
+                        id: 'user'
+                    linkAttributes:
+                        class: 'link'
+                    children:
+                        new:
+                            label: 'New User'
+                            uri: '/user/new'
+                        archive:
+                            label: 'User archive'
+                            uri: '/user/archive'
+                catalogs:
+                    label: 'Catalogs'
+                    route: 'catalogs'
+                    children:
+                        status:
+                            label: 'Status'
+                            uri: '/status/list'
+                statistics:
+                    label: 'Stats'
+                    uri: '/admin/stats'
 
         sidebar:  #another one ...
-            sidebar1:
-                label: "Sidebar 1"
+            children:
+                sidebar1:
+                    label: "Sidebar 1"
 ```
+Support KNP Menu Option
+* attributes
+* linkAttributes
+* childrenAttributes
+* labelAttributes
+* extras
 
 Using the knp twig helper we can print it
 
