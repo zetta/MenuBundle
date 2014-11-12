@@ -164,6 +164,7 @@ Support KNP Menu Option
 * childrenAttributes
 * labelAttributes
 * extras
+* displayChildren
 
 Using the knp twig helper we can print it
 
