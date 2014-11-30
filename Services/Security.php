@@ -58,33 +58,35 @@ class Security implements SecurityInterface{
             throw new \InvalidArgumentException("An array matching [uri=>'foo', 'route'=>'bar'] must be provide");
         }
 
-        if(isset($arguments['route']))
-        {
-            $arguments['uri'] = $this->router->generate($arguments['route'], isset($arguments['routeParameters'])?$arguments['routeParameters']:[]);
-        }
-
-        return $this->checkPermissionsForUri($arguments['uri']);
-    }
-
-    /**
-     * Check if a user has permission to a uri
-     * @param string $uri
-     * @return boolean
-     */
-    public function checkPermissionsForUri($uri)
-    {
         $attributes = null;
         if (!$token = $this->context->getToken()){
            throw new AuthenticationCredentialsNotFoundException('A Token was not found in the SecurityContext.');
         }
 
-        $route = $this->getRouteByUri($uri);
+        if(isset($arguments['route']))
+        {
+            $route = $this->router->getRouteCollection()->get($arguments['route']);
+        }
+        else
+        {
+            $route = $this->getRouteByUri($arguments['uri']);
+        }
+
+
         if (null === $route)
         {
             return true;
         }
-
-        list( $controllerName, $actionName ) = explode('::',$route->getDefault('_controller'));
+        $controller = $route->getDefault('_controller');
+        if (false === $pos = strpos($controller, '::'))
+        {
+            $count = substr_count($controller, ':');
+            if (1 == $count) {
+                // controller in the service:method notation
+                return true;
+            }
+        }
+        list( $controllerName, $actionName ) = explode('::',$controller);
         $metadata = $this->securityAnnotationDriver->loadMetadataForClass( new ReflectionClass($controllerName) );
         if(isset( $metadata->methodMetadata[$actionName] ))
         {
